@@ -4,6 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { client } from "../../sanityClient";
 import ProductCard from "../../components/ProductCard";
 
+export const dynamic = 'force-dynamic';
+
 export default function ProductsPage() {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState([]);
