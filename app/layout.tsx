@@ -3,7 +3,8 @@ import "./globals.css";
 import Link from "next/link";
 
 
-export default function RootLayout({ children }) {
+//export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const charcoal = "#2D2926";
   const gold = "#D4AF37";
   const paper = "#FDFCF8";
