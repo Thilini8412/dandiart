@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@sanity/image-url": "^2.0.3",
+    "@tailwindcss/postcss": "^4.2.2",
     "next": "15.1.0",
     "next-sanity": "^12.1.1",
     "react": "19.0.0",
@@ -20,7 +21,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "postcss": "^8",
+    "postcss": "^8.5.8",
     "typescript": "^5"
   }
 }

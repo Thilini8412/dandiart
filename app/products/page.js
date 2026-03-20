@@ -1,12 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react"; // Added Suspense
 import { useSearchParams } from "next/navigation";
 import { client } from "../../sanityClient";
 import ProductCard from "../../components/ProductCard";
 
 export const dynamic = 'force-dynamic';
 
-export default function ProductsPage() {
+// --- 1. Sub-component containing all your working logic ---
+function ProductsGallery() {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -56,7 +57,6 @@ export default function ProductsPage() {
     if (sortBy === "lowToHigh") result.sort((a, b) => a.price - b.price);
     else if (sortBy === "highToLow") result.sort((a, b) => b.price - a.price);
     else if (sortBy === "nameAsc") result.sort((a, b) => a.name.localeCompare(b.name));
-   // else if (sortBy === "latest") result.sort((a, b) => new Date(b._createdAt) - new Date(a._createdAt));
     else if (sortBy === "latest")  result.sort((a, b) => new Date(b._createdAt) - new Date(a._createdAt));
 
     setFiltered(result);
@@ -68,9 +68,22 @@ export default function ProductsPage() {
     setSortBy("latest");
   };
 
-  /*
-  const addToCart = (product, quantity) => {
+  const addToCart = (product, quantity, event) => {
     if (quantity <= 0) return;
+    if (event) {
+      const flyer = document.createElement('img');
+      flyer.src = product.image?.asset?.url || "/placeholder.png"; 
+      flyer.className = 'flying-item';
+      flyer.style.setProperty('--start-x', `${event.clientX}px`);
+      flyer.style.setProperty('--start-y', `${event.clientY}px`);
+      flyer.style.width = '50px';
+      flyer.style.height = '50px';
+      document.body.appendChild(flyer);
+      setTimeout(() => {
+        flyer.remove();
+        setIsCartOpen(false);
+      }, 800);
+    }
     setCart(prev => {
       const existing = prev.find(item => item._id === product._id);
       if (existing) {
@@ -81,47 +94,6 @@ export default function ProductsPage() {
       return [...prev, { ...product, quantity }];
     });
   };
-
-  */
-
-const addToCart = (product, quantity, event) => {
-  if (quantity <= 0) return;
-
-  // --- START ANIMATION LOGIC ---
-  if (event) {
-    const flyer = document.createElement('img');
-    // Assuming your product object has an image URL from Sanity
-    flyer.src = product.image?.asset?.url || "/placeholder.png"; 
-    flyer.className = 'flying-item';
-    
-    // Set starting position based on click
-    flyer.style.setProperty('--start-x', `${event.clientX}px`);
-    flyer.style.setProperty('--start-y', `${event.clientY}px`);
-    flyer.style.width = '50px';
-    flyer.style.height = '50px';
-
-    document.body.appendChild(flyer);
-
-    // Remove the element after animation ends
-    setTimeout(() => {
-      flyer.remove();
-      // Optional: Make the cart icon "jiggle" when the item arrives
-      setIsCartOpen(false); // Ensure it's closed so they see the icon
-    }, 800);
-  }
-  // --- END ANIMATION LOGIC ---
-
-  setCart(prev => {
-    const existing = prev.find(item => item._id === product._id);
-    if (existing) {
-      return prev.map(item => 
-        item._id === product._id ? { ...item, quantity: item.quantity + quantity } : item
-      );
-    }
-    return [...prev, { ...product, quantity }];
-  });
-};
-
 
   const sendWhatsApp = () => {
     const phone = "94716095523"; 
@@ -204,53 +176,6 @@ const addToCart = (product, quantity, event) => {
         </>
       )}
 
-      {/* --- 3. PAGE CONTENT (HEADER & FILTERS) --- */}
-      {/*}
-      <header style={{ textAlign: 'center', marginBottom: '30px', marginTop: '40px' }}>
-        <h1 style={{ fontSize: 'clamp(32px, 6vw, 54px)', color: charcoal, fontWeight: '800', textTransform: 'uppercase' }}>
-          OUR <span style={{ color: ochre }}>COLLECTION</span>
-        </h1>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '15px' }}>
-          {[...Array(6)].map((_, i) => (
-            <div key={i} style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: i % 2 === 0 ? gold : ochre }} />
-          ))}
-        </div>
-      </header>
-
-      <div style={{ maxWidth: '800px', margin: '0 auto 30px auto' }}>
-        <div style={{ position: 'relative', marginBottom: '20px' }}>
-          <span style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', opacity: 0.4 }}>🔍</span>
-          <input 
-            type="text" placeholder="Search our jewelry..." value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ width: '100%', padding: '16px 50px', borderRadius: '50px', border: '1px solid rgba(0,0,0,0.1)', outline: 'none' }}
-          />
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '20px' }}>
-          {["All", "earrings", "necklaces"].map((cat) => (
-            <button key={cat} onClick={() => setCategory(cat)} style={{ padding: '10px 24px', borderRadius: '50px', border: 'none', cursor: 'pointer', backgroundColor: category === cat ? ochre : '#ddd', color: category === cat ? 'white' : charcoal, fontWeight: 'bold' }}>{cat}</button>
-          ))}
-        </div>
-      </div>
-
-      /*}
-
-      {/* --- 3. PAGE CONTENT (HEADER & FILTERS) --- */}
-
-      {/*}
-      <header style={{ textAlign: 'center', marginBottom: '40px', marginTop: '60px' }}>
-        <h1 style={{ fontSize: 'clamp(32px, 6vw, 54px)', color: charcoal, fontWeight: '800', textTransform: 'uppercase', letterSpacing: '2px' }}>
-          OUR <span style={{ color: ochre }}>COLLECTION</span>
-        </h1>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '10px' }}>
-           <div style={{ width: '40px', height: '2px', backgroundColor: gold }} />
-           <div style={{ width: '10px', height: '2px', backgroundColor: ochre }} />
-           <div style={{ width: '40px', height: '2px', backgroundColor: gold }} />
-        </div>
-      </header>
-
-      */}
-
        <header style={{ textAlign: 'center', marginBottom: '30px', marginTop: '40px' }}>
         <h1 style={{ fontSize: 'clamp(32px, 6vw, 54px)', color: charcoal, fontWeight: '800', textTransform: 'uppercase' }}>
           OUR <span style={{ color: ochre }}>COLLECTION</span>
@@ -312,10 +237,8 @@ const addToCart = (product, quantity, event) => {
                   borderRadius: '10px', 
                   border: 'none', 
                   cursor: 'pointer', 
-                 // backgroundColor: category === cat ? "charcol" : '#f0f0f0', 
-                 backgroundColor: category === cat ? ochre : '#ddd',
-                //  color: category === cat ? 'white' : '#666', 
-                color: category === cat ? 'white' : charcoal,
+                  backgroundColor: category === cat ? ochre : '#ddd',
+                  color: category === cat ? 'white' : charcoal,
                   fontWeight: '600',
                   fontSize: '14px',
                   transition: 'all 0.2s ease',
@@ -326,8 +249,6 @@ const addToCart = (product, quantity, event) => {
               </button>
             ))}
 
-          
-            
             {(searchTerm || category !== "All") && (
               <button 
                 onClick={resetFilters} 
@@ -348,12 +269,17 @@ const addToCart = (product, quantity, event) => {
             <ProductCard key={item._id} product={item} onAddToCart={addToCart} cartCount={cartItem ? cartItem.quantity : 0} />
           );
         })}
-
-
-      </div>{/* --- 5. MINIMALIST PROFESSIONAL FOOTER --- */}
-
-
-
+      </div>
     </main>
+  );
+}
+
+// --- 2. THE FINAL EXPORT WRAPPER ---
+// This is what satisfies the Next.js build requirement
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<div style={{ textAlign: 'center', padding: '100px' }}>Loading Gallery...</div>}>
+      <ProductsGallery />
+    </Suspense>
   );
 }
