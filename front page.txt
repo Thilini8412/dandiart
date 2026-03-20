@@ -1,0 +1,120 @@
+
+import Link from 'next/link';
+
+export default function HomePage() {
+  const ochre = "#A3432F";
+  const charcoal = "#2D2926";
+  const paper = "#F9F4EE";
+  const gold = "#EBB035";
+
+  return (
+    <main style={{ backgroundColor: paper, minHeight: '100vh', color: charcoal, overflowX: 'hidden' }}>
+      
+      {/* 1. FLUID HERO SECTION */}
+      <section style={{ 
+        display: 'flex', 
+        minHeight: '90vh', 
+        alignItems: 'center', 
+        position: 'relative',
+        padding: '0 5%' 
+      }}>
+        {/* Decorative Background Text */}
+        <div style={{ 
+          position: 'absolute', 
+          top: '10%', 
+          left: '-5%', 
+          fontSize: '15vw', 
+          fontWeight: '900', 
+          color: 'rgba(0,0,0,0.03)', 
+          whiteSpace: 'nowrap',
+          zIndex: 0
+        }}>
+          HANDCRAFTED
+        </div>
+
+        <div style={{ flex: 1, zIndex: 1, paddingTop: '50px' }}>
+          <h1 style={{ fontSize: 'clamp(40px, 6vw, 90px)', lineHeight: '0.9', margin: 0 }}>
+            EARTH <br />
+            <span style={{ color: ochre, fontStyle: 'italic', fontWeight: '300' }}>INTO</span> <br />
+            ART
+          </h1>
+          <p style={{ maxWidth: '400px', margin: '30px 0', fontSize: '18px', lineHeight: '1.6', opacity: 0.8 }}>
+            Jewelry born from the ancient soils of Australia. Each piece is a fragment of a story, shaped by hand and heart.
+          </p>
+          <Link href="/products">
+            <button style={{ 
+              padding: '18px 45px', 
+              backgroundColor: charcoal, 
+              color: 'white', 
+              border: 'none', 
+              borderRadius: '2px', 
+              fontSize: '14px', 
+              letterSpacing: '3px',
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              transition: '0.3s'
+            }}>
+              Explore Shop
+            </button>
+          </Link>
+        </div>
+
+        {/* Hero Image Area with Dot Pattern */}
+        <div style={{ flex: 1.2, position: 'relative', height: '70vh', display: 'flex', justifyContent: 'flex-end' }}>
+          <div style={{ 
+            width: '90%', 
+            height: '100%', 
+            backgroundColor: '#e5e5e5', // Placeholder for your main image
+            borderRadius: '150px 0 0 150px',
+            overflow: 'hidden',
+            borderRight: `15px solid ${gold}`
+          }}>
+            {/* <img src="/your-hero-image.jpg" style={{width: '100%', height: '100%', objectFit: 'cover'}} /> */}
+          </div>
+          {/* Artistic Dots */}
+          <div style={{ position: 'absolute', bottom: '-20px', left: '0', display: 'grid', gridTemplateColumns: 'repeat(5, 15px)', gap: '10px' }}>
+            {[...Array(15)].map((_, i) => (
+              <div key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: i % 3 === 0 ? ochre : gold }} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 2. THE "STORY" SECTION (Organic Shapes) */}
+      <section style={{ padding: '100px 5%', textAlign: 'center' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '12px', letterSpacing: '5px', textTransform: 'uppercase', color: ochre, marginBottom: '20px' }}>
+            The Materials
+          </h2>
+          <p style={{ fontSize: 'clamp(20px, 3vw, 32px)', lineHeight: '1.4', fontWeight: '300' }}>
+            "We use <span style={{ fontWeight: 'bold' }}>Ochre</span> from the red earth, <span style={{ fontWeight: 'bold' }}>Seeds</span> from the dry bush, and <span style={{ fontWeight: 'bold' }}>Timber</span> from the ancient trees."
+          </p>
+        </div>
+      </section>
+
+      {/* 3. ASYMMETRICAL CATEGORY TILES */}
+      <section style={{ padding: '50px 5%', display: 'flex', gap: '40px', flexWrap: 'wrap' }}>
+        <Link href="/products" style={{ flex: 1.5, minWidth: '300px', textDecoration: 'none' }}>
+          <div style={{ position: 'relative', height: '500px', overflow: 'hidden' }}>
+            <div style={{ backgroundColor: '#ddd', height: '100%', width: '100%' }}></div>
+            <div style={{ position: 'absolute', bottom: '30px', left: '30px' }}>
+              <h3 style={{ color: 'white', fontSize: '40px', margin: 0, textShadow: '0 4px 10px rgba(0,0,0,0.3)' }}>EARRINGS</h3>
+              <p style={{ color: 'white', borderBottom: '2px solid white', display: 'inline-block' }}>SHOP NOW</p>
+            </div>
+          </div>
+        </Link>
+
+        <Link href="/products" style={{ flex: 1, minWidth: '300px', textDecoration: 'none', marginTop: '80px' }}>
+          <div style={{ position: 'relative', height: '500px', overflow: 'hidden' }}>
+            <div style={{ backgroundColor: '#ccc', height: '100%', width: '100%' }}></div>
+            <div style={{ position: 'absolute', bottom: '30px', left: '30px' }}>
+              <h3 style={{ color: 'white', fontSize: '40px', margin: 0, textShadow: '0 4px 10px rgba(0,0,0,0.3)' }}>NECKLACES</h3>
+              <p style={{ color: 'white', borderBottom: '2px solid white', display: 'inline-block' }}>SHOP NOW</p>
+            </div>
+          </div>
+        </Link>
+      </section>
+
+    </main>
+  );
+}
