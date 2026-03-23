@@ -1,0 +1,9 @@
+git add .
+git commit -m "Ready for client review"
+git remote add origin https://github.com/Thilini8412/dandiart-website.git
+git push -u origin main
+
+
+git config --global user.email "thilini8412@gmail.com"
+
+git config --global user.name "thilini_nadee"

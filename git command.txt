@@ -6,3 +6,8 @@ git push
 Save your work in VS Code.
 
 Open your terminal (Command Prompt or Git Bash) and run:
+
+
+NEXT_PUBLIC_SANITY_PROJECT_ID  0gce4lhq
+
+NEXT_PUBLIC_SANITY_DATASET  production
